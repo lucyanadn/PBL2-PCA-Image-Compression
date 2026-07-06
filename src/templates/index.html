@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PCA Image Compression</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Baloo+2:wght@500;600;700&family=Caveat:wght@500;700&family=Quicksand:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <h1>PCA Image Compression</h1>
+  </div>
+</header>
+
+<main class="layout">
+
+  <section class="panel controls" aria-label="Kontrol kompresi">
+
+    <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Pilih atau seret file gambar">
+      <input type="file" id="fileInput" accept="image/png, image/jpeg" hidden>
+      <div class="dropzone-content" id="dropzoneContent">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+          <path d="M12 16V4M12 4l-4 4M12 4l4 4"/>
+          <path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/>
+        </svg>
+        <p class="dz-title">Seret gambar ke sini (Maksimal 16MB)</p>
+        <p class="dz-sub">atau klik untuk memilih file (PNG / JPG)</p>
+      </div>
+      <div class="dz-filename" id="dzFilename" hidden></div>
+    </div>
+
+    <div class="field">
+      <div class="field-label-row">
+        <label for="rateSlider">Compression rate</label>
+        <span class="rate-value"><span id="rateValue">50</span><span class="unit">%</span></span>
+      </div>
+      <input type="range" id="rateSlider" min="0" max="99" value="50" step="1">
+      <div class="field-hint">
+        <span>0% &mdash; Jernih</span>
+        <span>99% &mdash; Sangat blur</span>
+      </div>
+    </div>
+
+    <div class="field spectrum-block">
+      <div class="field-label-row">
+        <label>Ilustrasi peluruhan nilai eigen</label>
+        <span class="mono-tag" id="kValue">k = 10</span>
+      </div>
+      <svg id="spectrum" viewBox="0 0 300 70" preserveAspectRatio="none" class="spectrum-svg"></svg>
+      <div class="field-hint"><span>Komponen yang dipertahankan</span></div>
+    </div>
+
+    <button id="compressBtn" class="btn-primary" type="button">
+      <span id="btnLabel">Compress Image</span>
+      <span class="spinner" id="btnSpinner" hidden></span>
+    </button>
+
+    <p class="error-msg" id="errorMsg" hidden></p>
+  </section>
+
+  <section class="panel preview" aria-label="Perbandingan gambar">
+    <div class="preview-grid">
+
+      <div class="preview-col">
+        <span class="preview-label">Before</span>
+        <div class="preview-frame" id="beforeFrame">
+          <span class="placeholder-text">Belum ada gambar</span>
+        </div>
+      </div>
+
+      <div class="preview-col">
+        <span class="preview-label">After</span>
+        <div class="preview-frame" id="afterFrame">
+          <span class="placeholder-text">Hasil kompresi akan muncul di sini</span>
+        </div>
+        <a class="btn-secondary" id="downloadBtn" hidden download="compressed.png">Download / Save As</a>
+      </div>
+
+    </div>
+
+    <div class="stats-row" id="statsRow" hidden>
+      <div class="stat">
+        <span class="stat-label">Pixel difference</span>
+        <span class="stat-value mono" id="statDiff">&mdash;</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Compression time</span>
+        <span class="stat-value mono" id="statTime">&mdash;</span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<p class="made-with">made with ♡</p>
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
